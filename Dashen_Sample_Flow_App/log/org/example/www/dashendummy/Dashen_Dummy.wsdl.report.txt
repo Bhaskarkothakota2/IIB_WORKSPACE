@@ -1,0 +1,22 @@
+
+
+Importing file: C:\Users\Sreenivas Bandaru\IBM\ACET12\workspace\Dashen_Sample_Flow_App\Dashen_Dummy.wsdl
+
+The WSDL import will proceed with bindings Dashen_DummySOAP.
+Creating wsdl schema document for file:///C:/Users/Sreenivas Bandaru/IBM/ACET12/workspace/Dashen_Sample_Flow_App/Dashen_Dummy.wsdl.
+Parsing wsdl binding {http://www.example.org/Dashen_Dummy/}Dashen_DummySOAP.
+Parsing wsdl binding input NewOperation.
+Parsing wsdl binding output NewOperation.
+Processing doc style for operation NewOperation.
+Populating WSDL schema Dashen_Dummy.xsd.
+Creating file Dashen_Dummy.xsd in the workspace.
+Creating file Dashen_Dummy_InlineSchema1.xsd in the workspace.
+Copying source WSDL Dashen_Dummy.wsdl to Dashen_Dummy.wsdl.
+
+Elapsed time processing this message definition file: 0.347 seconds
+Number of warnings for this message definition file: 0
+
+
+Number of files processed: 1
+
+

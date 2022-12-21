@@ -1,0 +1,24 @@
+
+
+CREATE COMPUTE MODULE Account_Summary_failure_flow_Compute
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		
+		 CALL CopyEntireMessage();
+		RETURN TRUE;
+	END;
+
+
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+		
+	DECLARE ref REFERENCE to InputRoot.SOAP.*:Body.*:QUERYACCBAL_IOFS_REQ.*:FCUBS_HEADER;
+	  IF (ref.*:MSGSTAT ='FAILURE') THEN
+	  	SET OutputLocalEnvironment.Destination.SOAP.Request.Transport.HTTP.WebServiceURL='http://localhost:7800/Dashen_ACT_Failure_Case_simulator';
+	  	
+	  ELSE
+	  	   SET OutputLocalEnvironment.Destination.SOAP.Request.Transport.HTTP.WebServiceURL='http://localhost:7800/Dashen_simulator';
+	  END IF;  
+	  SET OutputRoot = InputRoot;
+	  
+	END;
+END MODULE;

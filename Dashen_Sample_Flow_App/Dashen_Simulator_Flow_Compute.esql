@@ -1,0 +1,72 @@
+
+DECLARE S NAMESPACE 'http://schemas.xmlsoap.org/soap/envelope/';
+DECLARE S2 NAMESPACE 'http://fcubs.ofss.com/service/FCUBSAccService';
+
+
+CREATE COMPUTE MODULE Dashen_Simulator_Flow_Compute
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		-- CALL CopyMessageHeaders();
+		 CALL CopyEntireMessage();
+		RETURN TRUE;
+	END;
+
+
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+		DECLARE inref REFERENCE TO InputRoot.SOAP.*:Body.*:QUERYACCSUMM_IOFS_REQ.*:FCUBS_HEADER;
+		
+		DECLARE source,ubscomp,mid,correlid,userid,branch,service,operation,msgstat CHARACTER;
+		SET source = inref.S2:SOURCE;
+		SET ubscomp = inref.S2:UBSCOMP;
+		SET mid = inref.S2:MSGID;
+		SET correlid = inref.S2:CORRELID;
+		SET userid = inref.S2:USERID;
+		SET branch = inref.S2:BRANCH;
+		SET service = inref.S2:SERVICE;
+		SET operation = inref.S2:OPERATION;
+		SET msgstat = inref.S2:MSGSTAT;
+		
+		SET OutputRoot.XMLNSC.S:Envelope.(XMLNSC.NamespaceDecl)xmlns:S=S;
+		SET OutputRoot.XMLNSC.S:Envelope.S:Body.S2:QUERYACCSUMM_IOFS_RES.(XMLNSC.Attribute)xmlns=S2;
+
+		
+		SET OutputRoot.XMLNSC.S:Envelope.S:Body.S2:QUERYACCSUMM_IOFS_RES.S2:FCUBS_HEADER.S2:SOURCE = source;
+		SET OutputRoot.XMLNSC.S:Envelope.S:Body.S2:QUERYACCSUMM_IOFS_RES.S2:FCUBS_HEADER.S2:UBSCOMP = ubscomp;
+		SET OutputRoot.XMLNSC.S:Envelope.S:Body.S2:QUERYACCSUMM_IOFS_RES.S2:FCUBS_HEADER.S2:MSGID = mid;
+		SET OutputRoot.XMLNSC.S:Envelope.S:Body.S2:QUERYACCSUMM_IOFS_RES.S2:FCUBS_HEADER.S2:CORRELID = correlid;
+		SET OutputRoot.XMLNSC.S:Envelope.S:Body.S2:QUERYACCSUMM_IOFS_RES.S2:FCUBS_HEADER.S2:USERID = userid;
+		SET OutputRoot.XMLNSC.S:Envelope.S:Body.S2:QUERYACCSUMM_IOFS_RES.S2:FCUBS_HEADER.S2:BRANCH = branch;
+		SET OutputRoot.XMLNSC.S:Envelope.S:Body.S2:QUERYACCSUMM_IOFS_RES.S2:FCUBS_HEADER.S2:SERVICE = service;
+		SET OutputRoot.XMLNSC.S:Envelope.S:Body.S2:QUERYACCSUMM_IOFS_RES.S2:FCUBS_HEADER.S2:OPERATION = operation;
+		SET OutputRoot.XMLNSC.S:Envelope.S:Body.S2:QUERYACCSUMM_IOFS_RES.S2:FCUBS_HEADER.S2:DESTINATION = 'IBEXT1';
+		SET OutputRoot.XMLNSC.S:Envelope.S:Body.S2:QUERYACCSUMM_IOFS_RES.S2:FCUBS_HEADER.S2:FUNCTIONID = 'STDACCDT';
+		SET OutputRoot.XMLNSC.S:Envelope.S:Body.S2:QUERYACCSUMM_IOFS_RES.S2:FCUBS_HEADER.S2:ACTION = 'EXECUTEQUERY';
+		SET OutputRoot.XMLNSC.S:Envelope.S:Body.S2:QUERYACCSUMM_IOFS_RES.S2:FCUBS_HEADER.S2:MSGSTAT = msgstat;
+		
+		SET OutputRoot.XMLNSC.S:Envelope.S:Body.S2:QUERYACCSUMM_IOFS_RES.S2:FCUBS_BODY.S2:Stvw_Account_Sumary_Full.S2:CUST_NO = '002770250';
+		
+		SET OutputRoot.XMLNSC.S:Envelope.S:Body.S2:QUERYACCSUMM_IOFS_RES.S2:FCUBS_BODY.S2:Stvw_Account_Sumary_Full.S2:Stvw_Account_Sumary__A[1].S2:CUSTACNO = '0002770250011';
+		SET OutputRoot.XMLNSC.S:Envelope.S:Body.S2:QUERYACCSUMM_IOFS_RES.S2:FCUBS_BODY.S2:Stvw_Account_Sumary_Full.S2:Stvw_Account_Sumary__A[1].S2:BRANCH_CODE = '002';
+		SET OutputRoot.XMLNSC.S:Envelope.S:Body.S2:QUERYACCSUMM_IOFS_RES.S2:FCUBS_BODY.S2:Stvw_Account_Sumary_Full.S2:Stvw_Account_Sumary__A[1].S2:CCY = 'ETB';
+		SET OutputRoot.XMLNSC.S:Envelope.S:Body.S2:QUERYACCSUMM_IOFS_RES.S2:FCUBS_BODY.S2:Stvw_Account_Sumary_Full.S2:Stvw_Account_Sumary__A[1].S2:CURRBAL = '0';
+		SET OutputRoot.XMLNSC.S:Envelope.S:Body.S2:QUERYACCSUMM_IOFS_RES.S2:FCUBS_BODY.S2:Stvw_Account_Sumary_Full.S2:Stvw_Account_Sumary__A[1].S2:ACCOUNT_TYPE = 'U';
+		SET OutputRoot.XMLNSC.S:Envelope.S:Body.S2:QUERYACCSUMM_IOFS_RES.S2:FCUBS_BODY.S2:Stvw_Account_Sumary_Full.S2:Stvw_Account_Sumary__A[1].S2:CUSTOMER_NAME = 'TSEGAY AREGAWI HAILU-275473';
+		SET OutputRoot.XMLNSC.S:Envelope.S:Body.S2:QUERYACCSUMM_IOFS_RES.S2:FCUBS_BODY.S2:Stvw_Account_Sumary_Full.S2:Stvw_Account_Sumary__A[1].S2:AC_DESC = 'TSEGAY AREGAWI HAILU';
+		SET OutputRoot.XMLNSC.S:Envelope.S:Body.S2:QUERYACCSUMM_IOFS_RES.S2:FCUBS_BODY.S2:Stvw_Account_Sumary_Full.S2:Stvw_Account_Sumary__A[1].S2:ACCOUNT_CLASS = 'CURRNT';
+		SET OutputRoot.XMLNSC.S:Envelope.S:Body.S2:QUERYACCSUMM_IOFS_RES.S2:FCUBS_BODY.S2:Stvw_Account_Sumary_Full.S2:Stvw_Account_Sumary__A[1].S2:ACCLASSDESC = 'CURRENT ACCOUNT  CLASS';
+		
+		
+		SET OutputRoot.XMLNSC.S:Envelope.S:Body.S2:QUERYACCSUMM_IOFS_RES.S2:FCUBS_BODY.S2:Stvw_Account_Sumary_Full.S2:Stvw_Account_Sumary__A[2].S2:CUSTACNO = '5002770250001';
+		SET OutputRoot.XMLNSC.S:Envelope.S:Body.S2:QUERYACCSUMM_IOFS_RES.S2:FCUBS_BODY.S2:Stvw_Account_Sumary_Full.S2:Stvw_Account_Sumary__A[2].S2:BRANCH_CODE = '002';
+		SET OutputRoot.XMLNSC.S:Envelope.S:Body.S2:QUERYACCSUMM_IOFS_RES.S2:FCUBS_BODY.S2:Stvw_Account_Sumary_Full.S2:Stvw_Account_Sumary__A[2].S2:CCY = 'ETB';
+		SET OutputRoot.XMLNSC.S:Envelope.S:Body.S2:QUERYACCSUMM_IOFS_RES.S2:FCUBS_BODY.S2:Stvw_Account_Sumary_Full.S2:Stvw_Account_Sumary__A[2].S2:CURRBAL = '593.3';
+		SET OutputRoot.XMLNSC.S:Envelope.S:Body.S2:QUERYACCSUMM_IOFS_RES.S2:FCUBS_BODY.S2:Stvw_Account_Sumary_Full.S2:Stvw_Account_Sumary__A[2].S2:ACCOUNT_TYPE = 'S';
+		SET OutputRoot.XMLNSC.S:Envelope.S:Body.S2:QUERYACCSUMM_IOFS_RES.S2:FCUBS_BODY.S2:Stvw_Account_Sumary_Full.S2:Stvw_Account_Sumary__A[2].S2:CUSTOMER_NAME = 'TSEGAY AREGAWI HAILU-275473';
+		SET OutputRoot.XMLNSC.S:Envelope.S:Body.S2:QUERYACCSUMM_IOFS_RES.S2:FCUBS_BODY.S2:Stvw_Account_Sumary_Full.S2:Stvw_Account_Sumary__A[2].S2:AC_DESC = 'TSEGAY AREGAWI HAILU S/A';
+		SET OutputRoot.XMLNSC.S:Envelope.S:Body.S2:QUERYACCSUMM_IOFS_RES.S2:FCUBS_BODY.S2:Stvw_Account_Sumary_Full.S2:Stvw_Account_Sumary__A[2].S2:ACCOUNT_CLASS = 'SAVING';
+		SET OutputRoot.XMLNSC.S:Envelope.S:Body.S2:QUERYACCSUMM_IOFS_RES.S2:FCUBS_BODY.S2:Stvw_Account_Sumary_Full.S2:Stvw_Account_Sumary__A[2].S2:ACCLASSDESC = 'SAVINGS ACCOUNT  CLASS';
+		
+		SET OutputRoot.XMLNSC.S:Envelope.S:Body.S2:QUERYACCSUMM_IOFS_RES.S2:FCUBS_BODY.S2:FCUBS_WARNING_RESP.S2:WARNING.S2:WCODE = 'ST-SAVE-023';
+		SET OutputRoot.XMLNSC.S:Envelope.S:Body.S2:QUERYACCSUMM_IOFS_RES.S2:FCUBS_BODY.S2:FCUBS_WARNING_RESP.S2:WARNING.S2:WDESC = 'Record Successfully Retrieved';
+			END;
+END MODULE;

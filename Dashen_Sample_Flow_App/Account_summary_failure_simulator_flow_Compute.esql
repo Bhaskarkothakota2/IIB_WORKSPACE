@@ -1,0 +1,52 @@
+
+
+CREATE COMPUTE MODULE Account_summary_failure_simulator_flow_Compute
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		
+		 CALL CopyEntireMessage();
+		RETURN TRUE;
+	END;
+
+	
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+		DECLARE inref REFERENCE TO InputRoot.SOAP.*:Body.*:QUERYACCSUMM_IOFS_REQ.*:FCUBS_HEADER;
+		
+		DECLARE source,ubscomp,mid,correlid,userid,branch,service,operation,msgstat CHARACTER;
+		SET source = inref.S2:SOURCE;
+		SET ubscomp = inref.S2:UBSCOMP;
+		SET mid = inref.S2:MSGID;
+		SET correlid = inref.S2:CORRELID;
+		SET userid = inref.S2:USERID;
+		SET branch = inref.S2:BRANCH;
+		SET service = inref.S2:SERVICE;
+		SET operation = inref.S2:OPERATION;
+		SET msgstat = 'FAILURE';
+		
+		SET OutputRoot.XMLNSC.S:Envelope.(XMLNSC.NamespaceDecl)xmlns:S=S;
+		SET OutputRoot.XMLNSC.S:Envelope.S:Body.S2:QUERYACCSUMM_IOFS_RES.(XMLNSC.Attribute)xmlns=S2;
+		
+		
+		SET OutputRoot.XMLNSC.S:Envelope.S:Body.S2:QUERYACCSUMM_IOFS_RES.S2:FCUBS_HEADER.S2:SOURCE = source;
+		SET OutputRoot.XMLNSC.S:Envelope.S:Body.S2:QUERYACCSUMM_IOFS_RES.S2:FCUBS_HEADER.S2:UBSCOMP = ubscomp;
+		SET OutputRoot.XMLNSC.S:Envelope.S:Body.S2:QUERYACCSUMM_IOFS_RES.S2:FCUBS_HEADER.S2:MSGID = mid;
+		SET OutputRoot.XMLNSC.S:Envelope.S:Body.S2:QUERYACCSUMM_IOFS_RES.S2:FCUBS_HEADER.S2:CORRELID = correlid;
+		SET OutputRoot.XMLNSC.S:Envelope.S:Body.S2:QUERYACCSUMM_IOFS_RES.S2:FCUBS_HEADER.S2:USERID = userid;
+		SET OutputRoot.XMLNSC.S:Envelope.S:Body.S2:QUERYACCSUMM_IOFS_RES.S2:FCUBS_HEADER.S2:ENTITY.(XMLNSC.XmlDeclaration) = null;
+		SET OutputRoot.XMLNSC.S:Envelope.S:Body.S2:QUERYACCSUMM_IOFS_RES.S2:FCUBS_HEADER.S2:BRANCH = branch;
+		SET OutputRoot.XMLNSC.S:Envelope.S:Body.S2:QUERYACCSUMM_IOFS_RES.S2:FCUBS_HEADER.S2:SERVICE = service;
+		SET OutputRoot.XMLNSC.S:Envelope.S:Body.S2:QUERYACCSUMM_IOFS_RES.S2:FCUBS_HEADER.S2:OPERATION = operation;
+		SET OutputRoot.XMLNSC.S:Envelope.S:Body.S2:QUERYACCSUMM_IOFS_RES.S2:FCUBS_HEADER.S2:DESTINATION = 'IBEXT1';
+		SET OutputRoot.XMLNSC.S:Envelope.S:Body.S2:QUERYACCSUMM_IOFS_RES.S2:FCUBS_HEADER.S2:FUNCTIONID = 'STDACCDT';
+		SET OutputRoot.XMLNSC.S:Envelope.S:Body.S2:QUERYACCSUMM_IOFS_RES.S2:FCUBS_HEADER.S2:ACTION = 'EXECUTEQUERY';
+		SET OutputRoot.XMLNSC.S:Envelope.S:Body.S2:QUERYACCSUMM_IOFS_RES.S2:FCUBS_HEADER.S2:MSGSTAT = msgstat;
+		
+		SET OutputRoot.XMLNSC.S:Envelope.S:Body.S2:QUERYACCSUMM_IOFS_RES.S2:FCUBS_BODY.S2:Stvw_Account_Sumary_IO.S2:CUST_NO = '002770250';
+		
+		
+		SET OutputRoot.XMLNSC.S:Envelope.S:Body.S2:QUERYACCSUMM_IOFS_RES.S2:FCUBS_BODY.S2:FCUBS_ERROR_RESP.S2:ERROR.S2:ECODE = 'GW-ROUT0019';
+		SET OutputRoot.XMLNSC.S:Envelope.S:Body.S2:QUERYACCSUMM_IOFS_RES.S2:FCUBS_BODY.S2:FCUBS_ERROR_RESP.S2:ERROR.S2:EDESC = 'Failed while logging the message. Possible message id duplication';
+		
+		
+	END;
+END MODULE;
