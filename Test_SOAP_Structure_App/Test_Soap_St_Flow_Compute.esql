@@ -1,0 +1,21 @@
+
+DECLARE soap NAMESPACE 'http://schemas.xmlsoap.org/soap/envelope/';
+
+DECLARE sch NAMESPACE 'http://webservice.wecodee.com/schoolfeeservice';
+CREATE COMPUTE MODULE Test_Soap_St_Flow_Compute
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		
+		 CALL CopyEntireMessage();
+		RETURN TRUE;
+	END;
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+		 SET OutputRoot.XMLNSC.(XMLNSC.XmlDeclaration)=NULL;
+	  	SET OutputRoot.XMLNSC.soap:Envelope.(XMLNSC.NamespaceDecl)xmlns:soap=soap;
+	  	SET OutputRoot.XMLNSC.soap:Envelope.soap:Header.(XMLNSC.XmlDeclaration) = NULL;
+	   -- SET OutputRoot.XMLNSC.soap:Envelope.soap:Body.sch:(XMLNSC.Attribute)xmlns=sch;
+	  	SET OutputRoot.XMLNSC.soap:Envelope.soap:Body.sch:SchoolFeeDetailsRequest.(XMLNSC.NamespaceDecl)xmlns:sch=sch;
+	  	
+		SET OutputRoot.XMLNSC.soap:Envelope.soap:Body.sch:SchoolFeeDetailsRequest.sch:PHONE_NO = '125222552';
+	END;
+END MODULE;
