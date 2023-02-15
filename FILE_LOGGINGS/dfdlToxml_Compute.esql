@@ -1,0 +1,52 @@
+
+ DECLARE record_count SHARED INTEGER 1;
+CREATE COMPUTE MODULE dfdlToxml_Compute
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		-- CALL CopyMessageHeaders();
+	       CALL CopyEntireMessage();
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+--		SET OutputRoot.XMLNSC.data=InputRoot.DFDL.DFDLSCHEMA.body;
+--	    SET OutputRoot.DFDL.DFDLSCHEMA.body=InputRoot.XMLNSC.filelogging;
+--        SET OutputRoot.DFDL.DFDLSCHEMA.body.record_no=InputRoot.XMLNSC.filelogging.record_no;
+        SET OutputRoot.DFDL.DFDLSCHEMA.body.record_no = record_count;
+        SET OutputRoot.DFDL.DFDLSCHEMA.body.application_name=InputRoot.XMLNSC.filelogging.application_name;
+        SET OutputRoot.DFDL.DFDLSCHEMA.body.request_id=InputRoot.XMLNSC.filelogging.request_id;
+        SET OutputRoot.DFDL.DFDLSCHEMA.body.flowname_fqn=InputRoot.XMLNSC.filelogging.flowname_fqn;
+        SET OutputRoot.DFDL.DFDLSCHEMA.body.channel=InputRoot.XMLNSC.filelogging.channel;
+        SET OutputRoot.DFDL.DFDLSCHEMA.body.interval=InputRoot.XMLNSC.filelogging.interval;
+        SET OutputRoot.DFDL.DFDLSCHEMA.body.acc_no=InputRoot.XMLNSC.filelogging.acc_no;
+        SET OutputRoot.DFDL.DFDLSCHEMA.body.cust_id=InputRoot.XMLNSC.filelogging.cust_id;
+        SET OutputRoot.DFDL.DFDLSCHEMA.body.sif_id=InputRoot.XMLNSC.filelogging.sif_id;
+        SET OutputRoot.DFDL.DFDLSCHEMA.body.api_name=InputRoot.XMLNSC.filelogging.api_name;
+        SET OutputRoot.DFDL.DFDLSCHEMA.body.created_date=InputRoot.XMLNSC.filelogging.created_date;
+        SET OutputRoot.DFDL.DFDLSCHEMA.body.created_by=InputRoot.XMLNSC.filelogging.created_by;
+        SET OutputRoot.DFDL.DFDLSCHEMA.body.request=InputRoot.XMLNSC.filelogging.request;
+        SET OutputRoot.DFDL.DFDLSCHEMA.body.tp_requet=InputRoot.XMLNSC.filelogging.tp_requet;
+	    SET OutputRoot.DFDL.DFDLSCHEMA.body.tpr_response=InputRoot.XMLNSC.filelogging.tpr_response;
+	    SET OutputRoot.DFDL.DFDLSCHEMA.body.server=InputRoot.XMLNSC.filelogging.server;
+	    SET OutputRoot.DFDL.DFDLSCHEMA.body.response_time=InputRoot.XMLNSC.filelogging.response_time;
+	    SET OutputRoot.DFDL.DFDLSCHEMA.body.error_code=InputRoot.XMLNSC.filelogging.error_code;
+	    SET OutputRoot.DFDL.DFDLSCHEMA.body.error_desc=InputRoot.XMLNSC.filelogging.error_desc;
+	    SET OutputRoot.DFDL.DFDLSCHEMA.body.source=InputRoot.XMLNSC.filelogging.source;
+	    SET OutputRoot.DFDL.DFDLSCHEMA.body.type=InputRoot.XMLNSC.filelogging.type;
+	    SET OutputRoot.DFDL.DFDLSCHEMA.body.exception_detailes=InputRoot.XMLNSC.filelogging.exception_detailes;
+	    SET OutputRoot.DFDL.DFDLSCHEMA.body.response=InputRoot.XMLNSC.filelogging.response;
+	    SET OutputRoot.DFDL.DFDLSCHEMA.body.responce_result=InputRoot.XMLNSC.filelogging.responce_result;
+	   
+	    SET record_count = record_count+1;
+	END;
+END MODULE;
