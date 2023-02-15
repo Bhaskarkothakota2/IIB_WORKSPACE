@@ -1,0 +1,23 @@
+
+
+CREATE COMPUTE MODULE File_logs_j_Compute
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		-- CALL CopyMessageHeaders();
+		CALL CopyEntireMessage();
+		RETURN TRUE;
+	END;
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+		SET OutputRoot = InputRoot;
+		DECLARE Req,Res CHARACTER;
+		DECLARE con REFERENCE TO InputRoot.Properties.CodedCharSetId;
+		--SET Req = CAST(ASBITSTREAM(InputRoot.JSON.Data  CCSID InputRoot.Properties.CodedCharSetId ENCODING InputRoot.Properties.Encoding)AS CHARACTER);
+	SET Req = CAST(ASBITSTREAM(InputRoot.JSON.Data CCSID con ) AS CHARACTER CCSID con ENCODING InputRoot.Properties.Encoding) ;
+	SET Res =CAST(ASBITSTREAM(InputRoot.JSON.Data CCSID con ) AS CHARACTER CCSID con ENCODING InputRoot.Properties.Encoding) ;
+		CALL log_to_file(Req,Res);
+	END;
+END MODULE;
+
+CREATE PROCEDURE  log_to_file(IN vh CHARACTER,IN vz CHARACTER) 
+LANGUAGE JAVA
+EXTERNAL NAME "com.ganesh.log.Logs_In_File.req";
